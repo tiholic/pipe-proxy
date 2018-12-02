@@ -14,12 +14,12 @@ class ObjectProxy:
         execute them as well as to reply with whatever a method returns (in a form of a reply message).
         :param proxy_message_transmitter: Object that takes care of the communication part.
         """
-        self.proxyMessageSender = proxy_message_transmitter
+        self.proxyMessageTransmitter = proxy_message_transmitter
 
     def send_message(self, function_name, args):
         """Creates a Request and sends it. Always expects a reply"""
         request = RequestMessage(function_name, args)
-        reply = self.proxyMessageSender.send_message(request)
+        reply = self.proxyMessageTransmitter.send_message(request)
         assert isinstance(reply, ReplyMessage)
         return reply.get_content()
 

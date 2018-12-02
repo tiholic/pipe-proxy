@@ -1,14 +1,15 @@
 import multiprocessing
 import time
 import unittest
-from pipeproxy.lib.proxyMessages.replyMessage import *
-from pipeproxy.lib.proxyMessages.requestMessage import RequestMessage
-from pipeproxy.lib.objectProxy.objectProxy import ObjectProxy
-from pipeproxy.lib.objectProxy.proxyMessenger.proxyMessageSender import ProxyMessageSender
+from pipeproxy.lib.proxy_messages.reply_message import *
+from pipeproxy.lib.proxy_messages.request_message import RequestMessage
+from pipeproxy.lib.object_proxy.object_proxy import ObjectProxy
+from pipeproxy.lib.object_proxy.proxy_messenger.proxy_message_transmitter import ProxyMessageTransmitter
 
 
 class ObjectProxyTest(unittest.TestCase):
-    def sendMessageToPipe(self, conn, message):
+
+    def send_message_to_pipe(self, conn, message):
         # type: (multiprocessing.Connection, str) -> None
         time.sleep(0.1)
         reply = ReplyMessage(message)
@@ -20,39 +21,38 @@ class ObjectProxyTest(unittest.TestCase):
         return request
 
     def test_noReplyTimeout(self):
-        parentConnection, childConnection = multiprocessing.Pipe()
-        objectProxy = ObjectProxy(ProxyMessageSender(parentConnection))
+        parent_connection, child_connection = multiprocessing.Pipe()
+        object_proxy = ObjectProxy(ProxyMessageTransmitter(parent_connection))
 
-        assert objectProxy.send_message('someFunction', ()) == NullReplyMessage().get_content()
+        assert object_proxy.send_message('someFunction', ()) == NullReplyMessage().get_content()
 
     def test_sendMessageNoArgs(self):
-        parentConnection, childConnection = multiprocessing.Pipe()
-        objectProxy = ObjectProxy(ProxyMessageSender(parentConnection))
-        objectProxy.send_message('someFunction', ())
+        parent_connection, child_connection = multiprocessing.Pipe()
+        object_proxy = ObjectProxy(ProxyMessageTransmitter(parent_connection))
+        object_proxy.send_message('someFunction', ())
 
-        assert self.receiveMessageFromPipe(childConnection) == RequestMessage("someFunction")
+        assert self.receiveMessageFromPipe(child_connection) == RequestMessage("someFunction")
 
     def test_sendMessageWithArgs(self):
-        parentConnection, childConnection = multiprocessing.Pipe()
-        objectProxy = ObjectProxy(ProxyMessageSender(parentConnection))
-        objectProxy.send_message('someFunction', tuple([1, 2]))
+        parent_connection, child_connection = multiprocessing.Pipe()
+        object_proxy = ObjectProxy(ProxyMessageTransmitter(parent_connection))
+        object_proxy.send_message('someFunction', tuple([1, 2]))
 
-        assert self.receiveMessageFromPipe(childConnection) == RequestMessage("someFunction", tuple([1, 2]))
+        assert self.receiveMessageFromPipe(child_connection) == RequestMessage("someFunction", tuple([1, 2]))
 
     def test_sendAndReceiveMessage(self):
-        parentConnection, childConnection = multiprocessing.Pipe()
-        objectProxy = ObjectProxy(ProxyMessageSender(parentConnection))
-        p = multiprocessing.Process(target=self.sendMessageToPipe, args=[childConnection, 'reply'])
+        parent_connection, child_connection = multiprocessing.Pipe()
+        object_proxy = ObjectProxy(ProxyMessageTransmitter(parent_connection))
+        p = multiprocessing.Process(target=self.send_message_to_pipe, args=[child_connection, 'reply'])
         p.start()
 
-        assert objectProxy.send_message('someFunction', ()) == ReplyMessage("reply").get_content()
+        assert object_proxy.send_message('someFunction', ()) == ReplyMessage("reply").get_content()
 
-    def methodForTesting(self):
+    def method_for_testing(self):
         print("I am a test method")
 
     def test_addMethod(self):
-        parentConnection, childConnection = multiprocessing.Pipe()
-        objectProxy = ObjectProxy(ProxyMessageSender(parentConnection))
-        objectProxy.add_method(self.methodForTesting, "testMe")
-        objectProxy.testMe()
-
+        parent_connection, child_connection = multiprocessing.Pipe()
+        object_proxy = ObjectProxy(ProxyMessageTransmitter(parent_connection))
+        object_proxy.add_method(self.method_for_testing, "testMe")
+        object_proxy.testMe()
