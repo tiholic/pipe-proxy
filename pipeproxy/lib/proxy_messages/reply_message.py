@@ -2,13 +2,13 @@ class ReplyMessage:
     def __init__(self, content):
         self.content = content
 
-    def hasContent(self):
+    def has_content(self):
         if self.content is not None:
             return True
         else:
             return False
 
-    def getContent(self):
+    def get_content(self):
         return self.content
 
     def __str__(self):
@@ -23,10 +23,12 @@ class ReplyMessage:
 
 
 class NullReplyMessage(ReplyMessage):
+
     def __init__(self):
         ReplyMessage.__init__(self, None)
 
 
 class ErrorReplyMessage(ReplyMessage):
-    def __init__(self, errorMessage):
-        ReplyMessage.__init__(self, errorMessage)
+
+    def __init__(self, error_message):
+        ReplyMessage.__init__(self, error_message)

@@ -2,70 +2,71 @@ import time
 import unittest
 from multiprocessing import Process
 from pipeproxy.lib.proxyListener.proxyListener import ProxyListener
-from pipeproxy import proxy
+from pipeproxy import create_proxy
 from pipeproxy.lib.objectProxy.objectProxy import ObjectProxy
 from testObject import TestObject, UnpickleableTestObject
 
 
-def setParameterTest(testObjectLookAlike):
+def set_parameter_test(test_object_look_alike):
     # type: (TestObject) -> None
-    testObjectLookAlike.setParameter(5)
+    test_object_look_alike.setParameter(5)
 
 
-def getParameterTest(testObjectLookAlike):
-    assert testObjectLookAlike.getParameter() == 1
+def get_parameter_test(test_object_look_alike):
+    assert test_object_look_alike.getParameter() == 1
 
 
 class ProxyTest(unittest.TestCase):
-    def test_proxyCreate(self):
-        testObject = TestObject()
-        testObjectProxy, testObjectProxyListener = proxy.createProxy(testObject)
 
-        assert isinstance(testObjectProxy, ObjectProxy)
-        assert isinstance(testObjectProxyListener, ProxyListener)
+    def test_proxyCreate(self):
+        test_object = TestObject()
+        test_object_proxy, test_object_proxy_listener = create_proxy(test_object)
+
+        assert isinstance(test_object_proxy, ObjectProxy)
+        assert isinstance(test_object_proxy_listener, ProxyListener)
 
     def test_proxySetParameter(self):
-        testObject = TestObject()
-        testObjectProxy, testObjectProxyListener = proxy.createProxy(testObject)
-        p = Process(target=setParameterTest, args=(testObjectProxy,))
+        test_object = TestObject()
+        test_object_proxy, test_object_proxy_listener = create_proxy(test_object)
+        p = Process(target=set_parameter_test, args=(test_object_proxy,))
         p.start()
         time.sleep(1)
-        testObjectProxyListener.listen()
-        assert testObject.getParameter() == 5
+        test_object_proxy_listener.listen()
+        assert test_object.getParameter() == 5
 
     def test_proxyGetParameter(self):
-        testObject = TestObject()
-        testObjectProxy, testObjectProxyListener = proxy.createProxy(testObject)
-        p = Process(target=getParameterTest, args=(testObjectProxy,))
+        test_object = TestObject()
+        test_object_proxy, test_object_proxy_listener = create_proxy(test_object)
+        p = Process(target=get_parameter_test, args=(test_object_proxy,))
         p.start()
-        testObject.setParameter(1)
-        while testObjectProxyListener.listen():
+        test_object.setParameter(1)
+        while test_object_proxy_listener.listen():
             pass
 
     def test_unpickleableObjectMethodCall(self):
-        testObject = UnpickleableTestObject()
-        testObjectProxy, testObjectProxyListener = proxy.createProxy(testObject)
-        p = Process(target=testObjectProxy.startTimer)
+        test_object = UnpickleableTestObject()
+        test_object_proxy, test_object_proxy_listener = create_proxy(test_object)
+        p = Process(target=test_object_proxy.startTimer)
         p.start()
-        testObjectProxyListener.listen()
+        test_object_proxy_listener.listen()
 
         assert 1
 
     def test_methodCallWithMissingArgs(self):
-        testObject = TestObject()
-        testObjectProxy, testObjectProxyListener = proxy.createProxy(testObject)
-        testObjectProxy.setParameter()
+        test_object = TestObject()
+        test_object_proxy, test_object_proxy_listener = create_proxy(test_object)
+        test_object_proxy.setParameter()
         from pipeproxy.lib.proxyListener.proxyListenerMessageHandler import WrongArgumentsError
         with self.assertRaises(WrongArgumentsError):
-            testObjectProxyListener.listen()
+            test_object_proxy_listener.listen()
 
     def test_methodCallWithWrongArgs(self):
-        testObject = TestObject()
-        testObjectProxy, testObjectProxyListener = proxy.createProxy(testObject)
-        testObjectProxy.setParameter(1, 'a')
+        test_object = TestObject()
+        test_object_proxy, test_object_proxy_listener = create_proxy(test_object)
+        test_object_proxy.setParameter(1, 'a')
         from pipeproxy.lib.proxyListener.proxyListenerMessageHandler import WrongArgumentsError
         with self.assertRaises(WrongArgumentsError):
-            testObjectProxyListener.listen()
+            test_object_proxy_listener.listen()
 
 
 if __name__ == '__main__':

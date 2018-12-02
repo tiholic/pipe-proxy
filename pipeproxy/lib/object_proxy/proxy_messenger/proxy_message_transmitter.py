@@ -1,18 +1,19 @@
 import multiprocessing
 import pickle
-from pipeproxy.lib.proxyMessages.replyMessage import *
-from pipeproxy.lib.proxyMessages.requestMessage import *
+from ...proxy_messages.reply_message import *
+from ...proxy_messages.request_message import *
 
 
-class ProxyMessageSender:
-    def __init__(self, pipeConnection):
+class ProxyMessageTransmitter:
+
+    def __init__(self, pipe_connection):
         # type: (multiprocessing.Connection) -> None
-        self.conn = pipeConnection
+        self.conn = pipe_connection
 
-    def sendMessage(self, request):
+    def send_message(self, request):
         # type: (RequestMessage) -> ReplyMessage
         """Sends a request message threw the pipe and immediately expects a response with a 2s timeout"""
-        self._tryToPickle(request)  # object being sent threw pipe connection must be pickle-able
+        ProxyMessageTransmitter._try_to_pickle(request)  # object being sent threw pipe connection must be pickle-able
         self.conn.send(request)
         # always receive reply
         if self.conn.poll(2):
@@ -20,10 +21,10 @@ class ProxyMessageSender:
             assert isinstance(reply, ReplyMessage)
             return reply
         else:
-            print "Warning: no reply received for request (" + str(request) + ")"
+            print("Warning: no reply received for request (" + str(request) + ")")
             return NullReplyMessage()
 
-    def _tryToPickle(self, obj):
+    @staticmethod
+    def _try_to_pickle(obj):
         """Raises exception if not pickle-able"""
         pickle.dumps(obj)
-

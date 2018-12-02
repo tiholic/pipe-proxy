@@ -1,8 +1,8 @@
 from multiprocessing import Process
 from multiprocessing.managers import BaseManager
 import time
-from realThing import RealThing, RealThingUnpickleable
-from realThingProxy import RealThingProxy, RealThingUnpickleableProxy
+from .realThing import RealThing, RealThingUnpickleable
+from .realThingProxy import RealThingProxy, RealThingUnpickleableProxy
 import unittest
 
 
@@ -13,9 +13,9 @@ class MyManager(BaseManager):
 def getAndSetValue(realThingProxy):
     # type: (RealThing) -> None
 
-    if realThingProxy.getValue() == 5:
-        print "Reseting value of realThing via Proxy"
-        realThingProxy.setValue(0)
+    if realThingProxy.get_value() == 5:
+        print("Reseting value of realThing via Proxy")
+        realThingProxy.set_value(0)
 
 
 def someFunc():
@@ -30,29 +30,29 @@ class MultiprocessingProxyTest(unittest.TestCase):
         realThing = manager.RealThing()
         p1 = Process(target=getAndSetValue, args=[realThing])
 
-        print "------regular-----------"
-        print "Calling function from main process: "
-        realThing.myFunc()
-        print "Setting value to '5' from main process"
-        realThing.setValue(5)
-        print "Getting value from main process: "
-        print realThing.getValue()
-        print "-----------------"
+        print("------regular-----------",
+              "Calling function from main process: ")
+        realThing.my_func()
+        print("Setting value to '5' from main process")
+        realThing.set_value(5)
+        print("Getting value from main process: ",
+              realThing.get_value(),
+              "-----------------")
 
         p1.start()
         time.sleep(1)
-        print "Value of realThing was changed in a different process: " + str(realThing.myValue)
+        print("Value of realThing was changed in a different process: " + str(realThing.myValue))
 
-        assert realThing.getValue() == 0
+        assert realThing.get_value() == 0
 
     def test_setUnpicklableAttribute(self):
         MyManager.register('RealThing', RealThingUnpickleable, RealThingUnpickleableProxy)
         manager = MyManager()
         manager.start()
-        realThing = manager.RealThing()
+        real_thing = manager.RealThing()
 
         from threading import Timer
-        realThing.timer = Timer(2, someFunc)
+        real_thing.timer = Timer(2, someFunc)
 
         assert 1
 

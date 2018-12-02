@@ -22,12 +22,12 @@ class ProxyMessageSenderTest(unittest.TestCase):
         parentConnection, childConnection = multiprocessing.Pipe()
         messageSender = ProxyMessageSender(parentConnection)
 
-        assert messageSender.sendMessage(RequestMessage("request")) == NullReplyMessage()
+        assert messageSender.send_message(RequestMessage("request")) == NullReplyMessage()
 
     def test_sendingMessage(self):
         parentConnection, childConnection = multiprocessing.Pipe()
         messageSender = ProxyMessageSender(parentConnection)
-        messageSender.sendMessage(RequestMessage("request"))
+        messageSender.send_message(RequestMessage("request"))
 
         assert self.receiveMessageFromPipe(childConnection) == RequestMessage("request")
 
@@ -41,7 +41,7 @@ class ProxyMessageSenderTest(unittest.TestCase):
         unpickleableAttribute = Timer(1, self.method)
 
         with self.assertRaises(TypeError):
-            messageSender.sendMessage(RequestMessage("request", args=unpickleableAttribute))
+            messageSender.send_message(RequestMessage("request", args=unpickleableAttribute))
 
     def test_sendAndReceiveMessage(self):
         parentConnection, childConnection = multiprocessing.Pipe()
@@ -50,7 +50,7 @@ class ProxyMessageSenderTest(unittest.TestCase):
         p = multiprocessing.Process(target=self.sendMessageToPipe, args=[childConnection, 'reply'])
         p.start()
 
-        assert messageSender.sendMessage(RequestMessage("request")) == ReplyMessage("reply")
+        assert messageSender.send_message(RequestMessage("request")) == ReplyMessage("reply")
 
 
 

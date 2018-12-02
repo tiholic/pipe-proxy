@@ -5,18 +5,18 @@ class RealThing(object):
     def __init__(self):
         self.myValue = 0
 
-    def myFunc(self):
-        print "realThing func"
+    def my_func(self):
+        print("realThing func")
 
-    def setValue(self, value):
+    def set_value(self, value):
         self.myValue = value
 
-    def getValue(self):
+    def get_value(self):
         return self.myValue
 
 
 class RealThingUnpickleable(object):
+
     def __init__(self):
         self.myValue = 0
         self.timer = None
-

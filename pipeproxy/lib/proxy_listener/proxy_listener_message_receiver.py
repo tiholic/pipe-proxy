@@ -1,12 +1,13 @@
 import multiprocessing
 
-from pipeproxy.lib.proxyMessages.requestMessage import RequestMessage, NullRequestMessage
+from pipeproxy.lib.proxy_messages.request_message import RequestMessage, NullRequestMessage
 
 
 class ProxyListenerMessageReceiver:
-    def __init__(self, pipeConnection):
+
+    def __init__(self, pipe_connection):
         # type: (multiprocessing.Connection) -> None
-        self.conn = pipeConnection
+        self.conn = pipe_connection
 
     def receive(self):
         # type: () -> RequestMessage

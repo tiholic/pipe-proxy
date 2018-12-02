@@ -1,15 +1,15 @@
 class RequestMessage:
-    def __init__(self, function, args=()):
+    def __init__(self, fn, args=()):
         # type: (str, tuple) -> None
-        assert type(function) is str
-        self.function = function
+        assert type(fn) is str
+        self.function = fn
         self.args = args
 
-    def getFunction(self):
+    def get_function(self):
         # type: () -> str
         return self.function
 
-    def getArgs(self):
+    def get_args(self):
         # type: () -> tuple
         return self.args
 
@@ -30,6 +30,3 @@ class NullRequestMessage(RequestMessage):
 
     def __str__(self):
         return "Null request message"
-
-
-

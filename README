@@ -17,12 +17,12 @@ problem when using the solution from the multiprocessing module.
 
 ### How to use it?
 
-You call a method 'createProxy' from the pipeproxy.proxy module. You must also provide the object of which you want
+You call a method 'create_proxy' from the pipeproxy.proxy module. You must also provide the object of which you want
 the proxy to be created. (See Usage).
 The method returns objects proxy and also it's proxy listener. The proxy has all the callable methods of the original
 object. The proxy and proxy listener communicate using multiprocessing.Pipe.
 <br/>
-After calling the "createProxy" method you are left with three objects:
+After calling the "create_proxy" method you are left with three objects:
 * original object
 * proxy of the original object (with all the methods like the original)
 * proxy listener
@@ -74,10 +74,10 @@ Import proxy python module:
 from pipeproxy import proxy
 ```
 
-Use 'createProxy' method for creating both object proxy and proxy listener:
+Use 'create_proxy' method for creating both object proxy and proxy listener:
 
 ```
-proxy, proxyListener = proxy.createProxy(someObject)
+proxy, proxyListener = proxy.create_proxy(someObject)
 ```
 
 
@@ -94,11 +94,11 @@ class Example:
         self.parameter = None
 
     def setParameter(self, parameter):
-        print "setting parameter to: " + str(parameter)
+        print("setting parameter to: " + str(parameter))
         self.parameter = parameter
 
     def getParameter(self):
-        print "getting parameter: " + str(self.parameter)
+        print("getting parameter: " + str(self.parameter))
         return self.parameter
 
 
@@ -111,7 +111,7 @@ def getParameterTest(exampleLookAlike):
 
 
 example = Example()
-exampleProxy, exampleProxyListener = proxy.createProxy(example)
+exampleProxy, exampleProxyListener = proxy.create_proxy(example)
 
 
 # TEST 1

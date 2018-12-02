@@ -11,7 +11,7 @@ class ProxyListenerMessageHandlerTest(unittest.TestCase):
         testObject.setParameter(1)
         proxyListenerMessageHandler = ProxyListenerMessageHandler(testObject)
 
-        assert proxyListenerMessageHandler.handleReceivedMessage(RequestMessage('getParameter')) == ReplyMessage(1)
+        assert proxyListenerMessageHandler.handle_received_message(RequestMessage('getParameter')) == ReplyMessage(1)
 
     def test_handleIncorrectReceivedMessage(self):
         testObject = TestObject()
@@ -19,4 +19,4 @@ class ProxyListenerMessageHandlerTest(unittest.TestCase):
         proxyListenerMessageHandler = ProxyListenerMessageHandler(testObject)
         from pipeproxy.lib.proxyListener.proxyListenerMessageHandler import MissingFunctionError
         with self.assertRaises(MissingFunctionError):
-            proxyListenerMessageHandler.handleReceivedMessage(RequestMessage('something'))
+            proxyListenerMessageHandler.handle_received_message(RequestMessage('something'))

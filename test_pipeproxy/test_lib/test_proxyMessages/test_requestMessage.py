@@ -6,21 +6,21 @@ from pipeproxy.lib.proxyMessages.requestMessage import *
 class ReplyMessageTest(unittest.TestCase):
     def test_getFunction(self):
         request = RequestMessage('someFunction', [1, 2])
-        assert request.getFunction() == 'someFunction'
+        assert request.get_function() == 'someFunction'
 
     def test_getArgs(self):
         request = RequestMessage('someFunction', [1, 2])
-        assert request.getArgs() == [1, 2]
+        assert request.get_args() == [1, 2]
 
 
 class NullReplyMessageTest(unittest.TestCase):
     def test_getFunction(self):
         request = NullRequestMessage()
-        assert request.getFunction() == ''
+        assert request.get_function() == ''
 
     def test_getArgs(self):
         request = NullRequestMessage()
-        assert request.getArgs() == ()
+        assert request.get_args() == ()
 
 
 
