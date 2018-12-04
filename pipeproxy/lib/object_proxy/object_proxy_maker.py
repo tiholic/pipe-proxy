@@ -17,13 +17,11 @@ def proxy_function_decorator(fn):
 
 class ObjectProxyMaker:
 
-    def __init__(self, obj, pipe_connection):
-        # type: (object, multiprocessing.Pipe) -> None
+    def __init__(self, obj: object, pipe_connection: multiprocessing.Pipe):
         self.obj = obj
         self.conn = pipe_connection
 
-    def make(self):
-        # type: () -> ObjectProxy
+    def make(self) -> ObjectProxy:
         # get all methods from obj
         for methodName in dir(self.obj):
             if not methodName.startswith('__') and callable(getattr(self.obj, methodName)):

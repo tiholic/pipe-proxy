@@ -1,19 +1,21 @@
 import unittest
 
-from pipeproxy.lib.proxyMessages.requestMessage import *
+from pipeproxy.lib.proxy_messages.request_message import *
 
 
 class ReplyMessageTest(unittest.TestCase):
+
     def test_getFunction(self):
-        request = RequestMessage('someFunction', [1, 2])
+        request = RequestMessage('someFunction', (1, 2))
         assert request.get_function() == 'someFunction'
 
     def test_getArgs(self):
-        request = RequestMessage('someFunction', [1, 2])
+        request = RequestMessage('someFunction', (1, 2))
         assert request.get_args() == [1, 2]
 
 
 class NullReplyMessageTest(unittest.TestCase):
+
     def test_getFunction(self):
         request = NullRequestMessage()
         assert request.get_function() == ''
@@ -21,7 +23,3 @@ class NullReplyMessageTest(unittest.TestCase):
     def test_getArgs(self):
         request = NullRequestMessage()
         assert request.get_args() == ()
-
-
-
-

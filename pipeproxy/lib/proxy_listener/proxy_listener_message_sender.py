@@ -11,4 +11,3 @@ class ProxyListenerMessageSender:
     def send(self, message):
         # type: (ReplyMessage) -> None
         self.conn.send(message)
-

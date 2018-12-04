@@ -16,7 +16,3 @@ class ProxyListenerMessageReceiver:
             assert isinstance(message, RequestMessage)
             return message
         return NullRequestMessage()
-
-
-
-

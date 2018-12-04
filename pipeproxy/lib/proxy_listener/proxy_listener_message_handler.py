@@ -13,6 +13,7 @@ class MissingFunctionError(Exception):
 
 
 class ProxyListenerMessageHandler:
+
     def __init__(self, obj):
         self.obj = obj
 
@@ -37,5 +38,3 @@ class ProxyListenerMessageHandler:
                 "Wrong arguments " + str(args) + " for '" + str(fn) + "' in " + str(
                     self.obj.__class__.__name__) + " expected: " + str(function_specs)
             )
-
-

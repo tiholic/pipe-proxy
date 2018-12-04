@@ -10,8 +10,7 @@ class ProxyMessageTransmitter:
         # type: (multiprocessing.Connection) -> None
         self.conn = pipe_connection
 
-    def send_message(self, request):
-        # type: (RequestMessage) -> ReplyMessage
+    def send_message(self, request: RequestMessage) -> ReplyMessage:
         """Sends a request message threw the pipe and immediately expects a response with a 2s timeout"""
         ProxyMessageTransmitter._try_to_pickle(request)  # object being sent threw pipe connection must be pickle-able
         self.conn.send(request)

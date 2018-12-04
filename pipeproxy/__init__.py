@@ -1,8 +1,7 @@
 from multiprocessing import Pipe
 
-from .lib.proxy_listener.proxy_listener import ProxyListener
-
 from .lib.object_proxy.object_proxy_maker import ObjectProxyMaker
+from .lib.proxy_listener.proxy_listener import ProxyListener
 
 
 def create_proxy(obj):

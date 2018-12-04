@@ -20,7 +20,7 @@ http://matkodjipalo.com/index.php/2017/11/12/proxy-solution-python-multiprocessi
 
 ### How to use it?
 
-You call a method 'create_proxy' from the pipeproxy.proxy module. You must also provide the object of which you want
+You call a method 'create_proxy' from the pipeproxy module. You must also provide the object instance of which you want
 the proxy to be created. (See Usage).
 The method returns objects proxy and also it's proxy listener. The proxy has all the callable methods of the original
 object. The proxy and proxy listener communicate using multiprocessing.Pipe.

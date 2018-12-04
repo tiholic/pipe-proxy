@@ -21,3 +21,10 @@ class ProxyListener:
             reply = self.functionHandler.handle_received_message(message)
             assert isinstance(reply, ReplyMessage)
             self.messageSender.send(reply)
+
+    def send(self, fn, *args, **kwargs):
+        self.messageSender.send(ReplyMessage({
+            'fn': fn,
+            'args': args,
+            'kwargs': kwargs
+        }))
